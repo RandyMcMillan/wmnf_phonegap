@@ -1,0 +1,5 @@
+# WMNF Phonegap
+
+This is a work-in-progress mobile app developed for [WMNF Community Radio](http://www.wmnf.org) using the [phonegap](http://phonegap.com) platform.
+
+The goal is to create an open-source, cross-platform app for listening to and interacting with WMNF.
