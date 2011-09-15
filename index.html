@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no;" />
+
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8">
+    <link type="text/css" rel="stylesheet"  href="style.css"></link>
+    <link type="text/css" rel="stylesheet"  href="jquery.mobile-1.0b1/jquery.mobile.min.css"></link>
+    <link type="text/css" rel="stylesheet"  href="style.css"></link>
+    <script type="text/javascript" charset="utf-8" src="phonegap-1.0.0.js"></script>
+    <script type="text/javascript" charset="utf-8" src="jquery-1.6.2.min.js"></script>
+    <script type="text/javascript" charset="utf-8" src="jquery.mobile-1.0b1/jquery.mobile.min.js"></script>
+
+	<!-- iPad/iPhone specific css below, add after your main css >
+	<link rel="stylesheet" media="only screen and (max-device-width: 1024px)" href="ipad.css" type="text/css" />		
+	<link rel="stylesheet" media="only screen and (max-device-width: 480px)" href="iphone.css" type="text/css" />		
+	-->
+	<!-- If your application is targeting iOS BEFORE 4.0 you MUST put json2.js from http://www.JSON.org/json2.js into your www directory and include it here -->
+
+        <script type="text/javascript" charset="utf-8">
+
+	// If you want to prevent dragging, uncomment this section
+	/*
+	function preventBehavior(e) 
+	{ 
+      e.preventDefault(); 
+    };
+	document.addEventListener("touchmove", preventBehavior, false);
+	*/
+	
+	/* If you are supporting your own protocol, the var invokeString will contain any arguments to the app launch.
+	see http://iphonedevelopertips.com/cocoa/launching-your-own-application-via-a-custom-url-scheme.html
+	for more details -jm */
+	/*
+	function handleOpenURL(url)
+	{
+		// TODO: do something with the url passed in.
+	}
+	*/
+	
+	function onBodyLoad()
+	{		
+		document.addEventListener("deviceready",onDeviceReady,false);
+        getNowPlaying(1);
+	}
+	
+	/* When this function is called, PhoneGap has been initialized and is ready to roll */
+	/* If you are supporting your own protocol, the var invokeString will contain any arguments to the app launch.
+	see http://iphonedevelopertips.com/cocoa/launching-your-own-application-via-a-custom-url-scheme.html
+	for more details -jm */
+        function onDeviceReady()
+        {
+            console.log("device ready");
+            // do your thing!
+            //navigator.notification.alert("PhoneGap is working")
+            getNowPlaying(1);
+        }
+        var myaudio = nil;
+        var amPlaying = false;
+        
+        function getNowPlaying(streamid) {
+            console.log("*** gt now streamid " + streamid);
+            switch(streamid) {
+                case 1:
+                $.ajax({
+                       url: "http://www.wmnf.org/programs/now_playing_program_name",
+                       dataType: "text",
+                       success: function(text){
+                        console.log("*** got response " + text); 
+                        $("#hd1_now_playing").text(text);
+                       },
+                       error: function(jqXHR, textStatus, errorThrown) {
+                       console.log("*** error " + textStatus + "  : " + errorThrown);
+                       alert(errorThrown);
+                       }
+                });                    
+                break;
+                default:
+                break;
+            }
+        }
+        
+        function playStream(streamid) {
+            if (!amPlaying) {
+                getNowPlaying(streamid);
+                try {
+                    switch(streamid) {
+                        case 1:
+                        console.log("*** hello!!!");
+                        getNowPlaying(1);
+
+                        myaudio = new Audio('http://stream.wmnf.org:8000/wmnf_high_quality.m3u');
+                        //var myaudio = new Media('http://stream.wmnf.org:8000/wmnf_high_quality.m3u');
+                        myaudio.id = 'playerMyAudio';
+                        myaudio.play();
+                        amPlaying = true;
+                        $("#stop_btn_wrapper").show();
+                        break;
+                        case 2:
+                        myaudio = new Audio('http://bullsradio.org/bullsradio.m3u');
+                        //var myaudio = new Media('http://bullsradio.org/bullsradio.m3u');
+                        myaudio.id = 'playerMyAudio';
+                        myaudio.play();
+                        amPlaying = true;
+                        $("#stop_btn_wrapper").show();
+                        break;
+                        case 3:
+                        myaudio = new Audio('http://stream.wmnf.org:8000/wmnf_hd3.m3u');
+                        //var myaudio = new Media('http://stream.wmnf.org:8000/wmnf_hd3.m3u');
+                        myaudio.id = 'playerMyAudio';
+                        myaudio.play();
+                        amPlaying = true;
+                        $("#stop_btn_wrapper").show();
+                        break;
+                        
+                        case 4:
+                        myaudio = new Audio('http://stream.wmnf.org:8000/wmnf_hd4.m3u');
+                        //var myaudio = new Media('http://stream.wmnf.org:8000/wmnf_hd4.m3u');
+                        myaudio.id = 'playerMyAudio';
+                        myaudio.play();
+                        amPlaying = true;
+                        $("#stop_btn_wrapper").show();
+                        break;
+                    }
+                    
+                } catch (e) {
+                    alert("error: " + e.message);
+                }
+            }
+        }
+        function stopStream() {
+            try {
+                myaudio.pause();
+                amPlaying = false;
+                $("#stop_btn_wrapper").hide();
+            } catch(e) {
+                alert("error: " + e.message);
+            }
+        }
+        
+        </script>
+        </head>
+    <body onload="onBodyLoad()">
+        <div data-role="page" class="page">
+            <div id="wmnf_header"><img src="assets/img/wmnf_header.jpg"></div>
+            <button onclick="playStream(1)" id="listen_main">WMNF 88.5 FM</button>
+            <div id="hd1_now_playing"></div>
+            <button onclick="playStream(2)" id="listen_main">WMNF HD2 Bulls Radio</button>
+            <div id="hd2_now_playing"></div>
+            <button onclick="playStream(3)" id="listen_main">WMNF HD3 The Source</button>
+            <div id="hd3_now_playing"></div>
+            <button onclick="playStream(4)" id="listen_main">WMNF HD4 Hawk Radio</button>
+            <div id="hd4_now_playing"></div>
+            <div id="stop_btn_wrapper" style="display: none;">
+                <button onclick="stopStream()" id="stop_main">Stop</button>
+            </div>
+            <div id="contact_us">
+                <a href="mailto:dj@wmnf.org">DJ Email</a>
+                <a href="tel:+18132399663">Studio Line</a>
+            </div>
+        </div>
+    </body>
+</html>

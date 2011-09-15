@@ -1,0 +1,13 @@
+body {
+    background: #000;
+}
+div {background: #000;}
+.page {background: #000;}
+#wmnf_header {
+    text-align: center;
+}
+#hd1_now_playing {
+    height: 20px;
+    width: 100%;
+    color: #fff;
+}
